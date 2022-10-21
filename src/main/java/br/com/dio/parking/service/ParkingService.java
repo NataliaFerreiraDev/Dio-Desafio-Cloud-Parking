@@ -2,29 +2,72 @@ package br.com.dio.parking.service;
 
 import br.com.dio.parking.exception.ParkingNotFoundException;
 import br.com.dio.parking.model.Parking;
+import br.com.dio.parking.repository.ParkingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ParkingService {
 
-    private static Map<String, Parking> parkingMap = new HashMap();
+    private final ParkingRepository parkingRepository;
 
-    public List<Parking> findAll(){
-        return parkingMap.values().stream().collect(Collectors.toList());
+    public ParkingService(ParkingRepository parkingRepository) {
+        this.parkingRepository = parkingRepository;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<Parking> findAll(){
+        return parkingRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public Parking findById(String id) {
 
-        Parking parking = parkingMap.get(id);
+        return parkingRepository.findById(id).orElseThrow(() ->
+                new ParkingNotFoundException(id) );
+    }
 
-        if (parking == null){
-            throw new ParkingNotFoundException(id);
-        }
+    @Transactional
+    public Parking create(Parking parkingCreate) {
+        String uuid = getUUID();
+        parkingCreate.setId(uuid);
+        parkingCreate.setEntryDate(LocalDateTime.now());
+        parkingRepository.save(parkingCreate);
 
+        return parkingCreate;
+    }
+
+    @Transactional
+    public void delete(String id) {
+        findById(id);
+        parkingRepository.deleteById(id);
+    }
+
+
+    @Transactional
+    public Parking update(String id, Parking parkingCreate) {
+        Parking parking = findById(id);
+        parking.setColor(parkingCreate.getColor());
+        parking.setState(parkingCreate.getState());
+        parking.setModel(parkingCreate.getModel());
+        parking.setLicense(parkingCreate.getLicense());
+        parkingRepository.save(parking);
+
+        return parking;
+    }
+
+    @Transactional
+    public Parking checkOut(String id) {
+        Parking parking = findById(id);
+        parking.setExitDate(LocalDateTime.now());
+        parking.setBill(ParkingCheckOut.getBill(parking));
+        parkingRepository.save(parking);
         return parking;
     }
 
@@ -32,34 +75,4 @@ public class ParkingService {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
-    public Parking create(Parking parkingCreate) {
-        String uuid = getUUID();
-        parkingCreate.setId(uuid);
-        parkingCreate.setEntryDate(LocalDateTime.now());
-        parkingMap.put(uuid, parkingCreate);
-
-        return parkingCreate;
-    }
-
-    public void delete(String id) {
-        findById(id);
-        parkingMap.remove(id);
-    }
-
-
-    public Parking update(String id, Parking parkingCreate) {
-        Parking parking = findById(id);
-        parking.setColor(parkingCreate.getColor());
-        parkingMap.replace(id, parking);
-
-        return parking;
-    }
-
-    //TODO implementar
-    public Parking exit(String id) {
-        //recuperar o carro estacionado
-        //atualizar a data de saida
-        //calcular o valor
-        return null;
-    }
 }

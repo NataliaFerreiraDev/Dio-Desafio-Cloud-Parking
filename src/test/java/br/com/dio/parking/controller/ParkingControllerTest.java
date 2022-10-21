@@ -11,14 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ParkingControllerTestIT {
+class ParkingControllerTest extends AbstractContainerBase {
 
     @LocalServerPort
     private int randomPort;
 
     @BeforeEach
     public void setUpTest(){
-        System.out.println(randomPort);
         RestAssured.port = randomPort;
     }
 
@@ -31,6 +30,16 @@ class ParkingControllerTestIT {
                 .statusCode(HttpStatus.OK.value())
                 .body("license[0]", Matchers.equalTo("ABC-1234"));
     }
+
+//    @Test
+//    void whenFindAllThenCheckResult() {
+//        RestAssured.given()
+//                .auth().basic("user", "Dio@123456")
+//                .when()
+//                .get("/parking")
+//                .then()
+//                .statusCode(HttpStatus.OK.value());
+//    }
 
     @Test
     void whenCreateThenCheckIsCreated() {

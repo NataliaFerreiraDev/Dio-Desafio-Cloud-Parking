@@ -75,11 +75,10 @@ public class ParkingController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    //TODO implementar
     @PostMapping("/{id}")
     @ApiOperation("Exit parking")
     public ResponseEntity<ParkingDTO> exit(@PathVariable String id){
-        Parking parking = parkingService.exit(id);
+        Parking parking = parkingService.checkOut(id);
         return ResponseEntity.ok(parkingMapper.toParkingDTO(parking));
     }
 
