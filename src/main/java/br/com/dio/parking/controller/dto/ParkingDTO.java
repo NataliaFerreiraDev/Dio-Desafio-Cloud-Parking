@@ -1,9 +1,9 @@
-package br.com.dio.parking.model.dto;
+package br.com.dio.parking.controller.dto;
+
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ParkingDTO {
@@ -82,4 +82,5 @@ public class ParkingDTO {
     public void setBill(Double bill) {
         this.bill = bill;
     }
+
 }

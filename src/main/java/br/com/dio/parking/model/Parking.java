@@ -1,8 +1,9 @@
 package br.com.dio.parking.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.time.LocalDateTime;
 
 @Entity
 public class Parking {
@@ -17,15 +18,15 @@ public class Parking {
     private LocalDateTime exitDate;
     private Double bill;
 
-    public Parking() {
-    }
-
     public Parking(String id, String license, String state, String model, String color) {
         this.id = id;
         this.license = license;
         this.state = state;
         this.model = model;
         this.color = color;
+    }
+
+    public Parking() {
     }
 
     public String getId() {

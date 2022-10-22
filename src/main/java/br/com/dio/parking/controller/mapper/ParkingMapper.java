@@ -1,20 +1,22 @@
-package br.com.dio.parking.model.mapper;
-
-import br.com.dio.parking.model.Parking;
-import br.com.dio.parking.model.dto.ParkingCreateDTO;
-import br.com.dio.parking.model.dto.ParkingDTO;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Component;
+package br.com.dio.parking.controller.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import br.com.dio.parking.controller.dto.ParkingCreateDTO;
+import br.com.dio.parking.controller.dto.ParkingDTO;
+import br.com.dio.parking.model.Parking;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
+
+
 
 @Component
 public class ParkingMapper {
 
     private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
-    public ParkingDTO toParkingDTO(Parking parking){
+    public ParkingDTO toParkingDTO(Parking parking) {
         return MODEL_MAPPER.map(parking, ParkingDTO.class);
     }
 

@@ -1,7 +1,6 @@
 package br.com.dio.parking.service;
 
 import br.com.dio.parking.model.Parking;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 

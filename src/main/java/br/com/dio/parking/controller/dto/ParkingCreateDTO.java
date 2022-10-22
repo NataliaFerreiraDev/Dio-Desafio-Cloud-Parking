@@ -1,8 +1,5 @@
-package br.com.dio.parking.model.dto;
+package br.com.dio.parking.controller.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ParkingCreateDTO {
 
     private String license;
@@ -41,5 +38,4 @@ public class ParkingCreateDTO {
     public void setColor(String color) {
         this.color = color;
     }
-
 }
